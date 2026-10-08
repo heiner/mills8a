@@ -2,3 +2,4 @@
 \ProvidesFile{ot1m8aop.fd}[2026/10/08 v0.1.0 Mills 8A math operators, pdfLaTeX]
 \DeclareFontFamily{OT1}{m8aop}{}
 \DeclareFontShape{OT1}{m8aop}{m}{n}{<-6> m8aopss <6-8> m8aops <8-> m8aop}{}
+\DeclareFontShape{OT1}{m8aop}{b}{n}{<-6> m8abopss <6-8> m8abops <8-> m8abop}{}

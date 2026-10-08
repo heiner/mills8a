@@ -1,9 +1,10 @@
 # Mills 8A: a revival of Monotype Modern 8A from 1947 scans
 
 A font family traced from the type of the *Bulletin of the AMS*, 1947,
-which was 11 pt Monotype Modern 8A on 12 pt leading. Nothing is drawn by
-hand: every master glyph is the average of the copies of that sort found on
-the page scans, and the spacing is measured from the text.
+which was 11 pt Monotype Modern 8A on 12 pt leading. Historical master
+glyphs are averages of impressions found on the page scans, and their
+spacing is measured from the text. The missing calligraphic capitals are
+new drawings, documented below.
 
 ![comparison](../docs/comparison.png)
 
@@ -12,6 +13,7 @@ the page scans, and the spacing is measured from the text.
 | `Mills8A-Regular.otf` | 11 pt roman, figures, punctuation, small caps (`smcp`), f-ligatures (`liga`), random impressions (`rand`) |
 | `Mills8A-Italic.otf` | 11 pt italic and Greek, f-ligatures, `rand` |
 | `Mills8A-Math.otf` | OpenType MATH font: the letters, figures, operators and **real script sorts** for indices, on Latin Modern Math |
+| `Mills8A-MathBold.otf` | synthesized bold version of the Mills math outlines |
 | `Mills8A-Bold.otf` | bold, from the 1947 title capitals |
 | `Mills8A-BoldItalic.otf` | bold italic: the italic thickened to the bold stems (synthesized) |
 | `Mills8A-Regular9.otf`, `Mills8A-Italic9.otf` | 9 pt cut for footnotes and references |
@@ -139,8 +141,49 @@ them in `scans/`:
     ../render.sh            # the PDFs, proof sheets and the images in the top-level README
 
 Requires TeX Live (pdfLaTeX, `lcdf-typetools`; LuaLaTeX for the OpenType example), Tesseract, potrace,
-and Python 3 with numpy, scipy, Pillow and fontTools. The built fonts are
+and Python 3 with numpy, scipy, Pillow, fontTools, freetype-py and skia-pathops. The built fonts are
 committed in `fonts/` and `pdftex/fonts/`.
+
+### Rebuilding the completed math alphabets without scans
+
+The calligraphic completion and bold math use the checked-in OpenType fonts:
+
+```sh
+python3 complete_math.py
+python3 pdftex/build_pdftex.py
+python3 check_math_completion.py
+../make-tds.sh
+../install.sh
+```
+
+`calligraphic.py` contains editable Bezier centreline drawings for the 22
+missing capitals. Elliptical pen strokes are expanded and unioned into
+CFF outlines; their weight is calibrated against the historical A, C, L,
+and U, which remain unchanged. These are reconstructions, not traced
+historical glyphs. Optical-size variants receive additional stroke growth.
+
+`complete_math.py` also weight-matches the untraced Greek fill-ins from
+Latin Modern and builds `Mills8A-MathBold.otf` by expanding Mills outlines
+11 units per edge. Thus `\boldsymbol` selects genuinely different outlines,
+including delta, iota, rho and upsilon. The same outlines populate Unicode
+bold Latin, Greek and script alphabets. Both steps are repeatable and need
+neither the scans nor `work/masters.pkl`.
+
+Fraction and radical rules use 80 units per em (102 in bold). Radical
+outlines, their size variants and assembly pieces are expanded from the
+unmodified Latin Modern source to the same weight. Assembly joints are
+clipped flat to avoid pinholes when classic TeX stacks them. The pdfLaTeX
+builder exports dedicated radical fonts, puts each roof on a baseline
+whose height equals the rule thickness, and sets the extension font's
+`DEFAULTRULETHICKNESS`. This is needed in addition to the OpenType MATH
+constants: classic TeX measures radical rules from glyph heights.
+
+`check_math_completion.py` verifies that the four historical capitals are
+unchanged, all 26 capitals have distinct outlines and optical sizes, the
+new stroke weights agree with the historical letters, and bold Greek has
+more ink at every optical size. It also checks rule metrics and flat radical
+joins. `../proof/math-alphabets.tex` and `../proof/math-rules.tex` are the visual
+proof sheets.
 
 ## Pipeline (`./build.sh`, about 1 h 15 min on 4 cores; OCR and clustering are most of it)
 
@@ -160,6 +203,7 @@ committed in `fonts/` and `pdftex/fonts/`.
 | `accents.py` | accented Latin-1 / Latin Extended-A letters, dotless *ı ȷ*, the missing punctuation |
 | `build_math.py` | the MATH font |
 | `build_sizes.py` | bold, bold italic and 9 pt |
+| `complete_math.py` | reconstructed missing calligraphic capitals, Greek fill-in weights, bold math |
 | `pdftex/build_pdftex.py` | the family as Type 1 / TFM fonts for pdfLaTeX |
 
 `scripts.py` is not part of the build: it proposes labels for script-size
@@ -267,6 +311,10 @@ delimiters and all symbols the scans don't have. On top of that:
   glyphs thickened to the script sorts' weight, so scaled-down letters
   don't come out light.
 - The display ∑ and ∏ are the 1947 display sorts.
+- The calligraphic alphabet retains the historical A, C, L and U; the
+  other capitals are new roundhand drawings, with two optical-size variants.
+- Bold math is synthesized from the same Mills outlines, with dedicated
+  pdfLaTeX families and Unicode bold alphabet mappings.
 - `ScriptPercentScaleDown` 59, `ScriptScriptPercentScaleDown` 50 and the
   superscript and subscript shifts come from the Erdős measurements. Note
   that LaTeX's `unicode-math` takes script sizes from the LaTeX size table,

@@ -15,11 +15,12 @@ Monotype Modern 8A (Lanston Monotype's series 8, roman with italic) is a
 Scotch-style "modern" face: strong contrast, ball terminals, cast in hot metal
 and printed by letterpress. It was a standard face of American mathematical
 printing from the 1920s to the 1960s, and it is the face Knuth modelled
-Computer Modern on. Mills 8A is not a redrawing. Its glyphs are traced from the
-type itself: averaged from about 900,000 letter impressions on 461 scanned
+Computer Modern on. Mills 8A's historical glyphs are traced from the type
+itself: averaged from about 900,000 letter impressions on 461 scanned
 pages of the *Bulletin* and the *Transactions* (1940–1948). The shapes, the
 weight of the ink, the Monotype unit widths and the real 1947 script sorts are
-all as they were printed.
+as they were printed. The calligraphic capitals absent from the scans are
+new reconstructions, described below.
 
 ## The 1947 page, reset
 
@@ -101,6 +102,44 @@ example, including the 1947 script positions.
 | Mills8A-Bold, -BoldItalic | bold (from the titles); bold italic (synthesized) |
 | Mills8A-Regular9, -Italic9 | the 9 pt cut, for footnotes and references |
 | Mills8A-Math | the 1947 letters, Greek, operators, relations, Fraktur, display ∑ ∏ ∫, and the real first- and second-order **script sorts** for indices |
+| Mills8A-MathBold | synthesized bold math outlines, including Greek and calligraphic capitals |
+
+### Calligraphic capitals and bold mathematics
+
+`\mathcal{ABCDEFGHIJKLMNOPQRSTUVWXYZ}` has a complete, weight-matched
+alphabet. **A, C, L and U** retain their historical outlines; the other
+22 capitals are newly drawn reconstructions in the same roundhand style,
+not additional recovered historical sorts. Both index sizes are included.
+
+With pdfLaTeX, `\boldsymbol{\delta\iota\rho\upsilon}` (from `amsmath`)
+uses synthesized bold Mills outlines. The package selects these fonts
+automatically; no document-level font overrides are needed.
+
+For LuaLaTeX/XeLaTeX, the normal math font also contains the completed
+Unicode bold alphabets. To select the bold font for entire formulas:
+
+```latex
+\setmathfont{Mills8A-Math.otf}
+\setmathfont{Mills8A-MathBold.otf}[version=bold]
+```
+
+[`proof/math-alphabets.tex`](proof/math-alphabets.tex) shows the reconstructed
+capitals, bold forms, Greek, accents and small sizes
+([PDF preview](proof/math-alphabets.pdf)).
+
+Fraction bars and radical roofs use a 0.08-em rule (0.102 em in bold),
+with matching radical outlines and extensible pieces. The pdfLaTeX metrics
+and OpenType MATH constants carry the settings, so ordinary `\frac` and
+`\sqrt` commands pick them up automatically. See
+[`proof/math-rules.tex`](proof/math-rules.tex) for inline, nested and tall
+examples; it compiles with pdfLaTeX, LuaLaTeX and XeLaTeX.
+The [PDF preview](proof/math-rules.pdf) includes normal and bold mathematics.
+
+For a complete text/math alphabet specimen, compile
+[`proof/font-alphabets.tex`](proof/font-alphabets.tex). Its reusable LaTeX3
+commands are in [`proof/alphabet-macros.tex`](proof/alphabet-macros.tex),
+including `\TextUppercase[\textbf]`, `\LatinUppercase[\mathcal]` and
+`\GreekLowercase[\boldsymbol]`.
 
 ### OpenType fonts
 
@@ -170,6 +209,8 @@ Filled in otherwise:
   bold's weight and x-height), and the script sizes that have no legible
   real sort (the text glyph scaled: among them the index 2 3 4 8, whose
   real sorts fill in);
+- newly drawn: 22 calligraphic capitals completing the historical A, C, L
+  and U; their optical-size forms and the bold math outlines are synthesized;
 - from Latin Modern, thickened to the type's weight: accents other than the
   dieresis (the acute of á and é is real only in those letters), rarer punctuation and symbols (`# % @` † ‡ ¶ « » ß Æ Œ Ø Ł
   and so on), and the math symbols the scans lack.

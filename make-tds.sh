@@ -25,6 +25,10 @@ for f in mills-specimen-a4.pdf mills-specimen-letter.pdf mills-8a.pdf; do
   [ -f "$f" ] && cp "$f" "$T/doc/fonts/mills8a/"
 done
 cp tex/mills.tex tex/specimen.tex "$T/doc/fonts/mills8a/"
+cp proof/math-alphabets.tex "$T/doc/fonts/mills8a/"
+cp proof/math-rules.tex "$T/doc/fonts/mills8a/"
+cp proof/math-alphabets.pdf proof/math-rules.pdf "$T/doc/fonts/mills8a/"
+cp proof/alphabet-macros.tex proof/font-alphabets.tex "$T/doc/fonts/mills8a/"
 rm -f mills8a.tds.zip
 (cd "$T" && zip -qr ../../mills8a.tds.zip .)
 echo "mills8a.tds.zip: $(cd "$T" && find . -type f | wc -l) files, version $(cat VERSION)"

@@ -1,0 +1,13 @@
+% Compile with pdflatex from the repository root or this directory.
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=22mm]{geometry}
+\usepackage{amsmath,amssymb,mathrsfs}
+\usepackage{mills8a}
+\InputIfFileExists{alphabet-macros.tex}{}{\input{proof/alphabet-macros.tex}}
+\begin{document}
+\section*{Mills 8A: text faces}
+\TextAlphabetSamples
+\clearpage
+\section*{Mills 8A: math faces and Greek}
+\AlphabetSamples
+\end{document}

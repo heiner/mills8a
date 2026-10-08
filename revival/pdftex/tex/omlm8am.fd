@@ -2,3 +2,4 @@
 \ProvidesFile{omlm8am.fd}[2026/10/08 v0.1.0 Mills 8A math italic, pdfLaTeX]
 \DeclareFontFamily{OML}{m8am}{\skewchar\font=127 }
 \DeclareFontShape{OML}{m8am}{m}{it}{<-6> m8amiss <6-8> m8amis <8-> m8ami}{}
+\DeclareFontShape{OML}{m8am}{b}{it}{<-6> m8abmiss <6-8> m8abmis <8-> m8abmi}{}

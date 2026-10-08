@@ -184,7 +184,7 @@ def glyph_for(f, cmap, ssty, cp, level, fallback=None):
 
 
 def make_tex_font(name, f, glyphs, design_pt, family, fontdimens, ic=None, acc=None,
-                  skewchar=None):
+                  skewchar=None, baseline_offsets=None):
     """glyphs: {slot: glyph name}.  Writes name.pfb (a renamed subset of f),
     name.enc and name.tfm (via a property list); returns the map line."""
     ic, acc = ic or {}, acc or {}
@@ -199,6 +199,14 @@ def make_tex_font(name, f, glyphs, design_pt, family, fontdimens, ic=None, acc=N
     s = subset.Subsetter(opts)
     s.populate(glyphs=sorted(set(glyphs.values())))
     s.subset(sub)
+    if baseline_offsets:
+        from fontTools.pens.t2CharStringPen import T2CharStringPen
+        from fontTools.pens.transformPen import TransformPen
+        top = sub["CFF "].cff.topDictIndex[0]
+        for glyph, dy in baseline_offsets.items():
+            pen = T2CharStringPen(sub["hmtx"][glyph][0], None)
+            top.CharStrings[glyph].draw(TransformPen(pen, (1, 0, 0, 1, 0, dy)))
+            top.CharStrings[glyph] = pen.getCharString(top.Private, top.GlobalSubrs)
     cff = sub["CFF "].cff
     cff.fontNames[0] = psname
     cff.topDictIndex[0].FullName = psname
@@ -254,9 +262,9 @@ def make_tex_font(name, f, glyphs, design_pt, family, fontdimens, ic=None, acc=N
     return f'{name} {psname} "{enc} ReEncodeFont" <{name}.enc <{name}.pfb'
 
 
-def math_fonts():
-    f = TTFont(os.path.join(SRC, "Mills8A-Math.otf"))
-    reg = TTFont(os.path.join(SRC, "Mills8A-Regular.otf"))
+def math_fonts(bold=False):
+    f = TTFont(os.path.join(SRC, "Mills8A-MathBold.otf" if bold else "Mills8A-Math.otf"))
+    prefix = "m8ab" if bold else "m8a"
     cmap = f.getBestCmap()
     math, ic, acc, ssty = math_tables(f)
     mc = math.MathConstants
@@ -270,14 +278,14 @@ def math_fonts():
         g[0x7F] = glyph_for(f, cmap, ssty, 0x2040, level) or g.get(0x3B)   # tie / skewchar
         if "tex.acc.20D7" in f.getGlyphOrder():
             g[0x7E] = "tex.acc.20D7"                                    # \vec
-        lines.append(make_tex_font(f"m8ami{suffix}", f, g, size, "MILLS8A-MATHITALIC",
+        lines.append(make_tex_font(f"{prefix}mi{suffix}", f, g, size, "MILLS8A-MATHITALIC",
                                    [("SLANT", 0.25), ("SPACE", 0), ("XHEIGHT", 440),
                                     ("QUAD", 1000)], ic=ic, acc=acc, skewchar=0x7F))
         # family 0: operators
         g = {s: glyph_for(f, cmap, ssty, cp, level) for s, cp in OPS.items()}
         g = {s: n for s, n in g.items() if n}
         g.update({s: n for s, n in OPS_NAMED.items() if n in f.getGlyphOrder()})
-        lines.append(make_tex_font(f"m8aop{suffix}", f, g, size, "MILLS8A-OPERATORS",
+        lines.append(make_tex_font(f"{prefix}op{suffix}", f, g, size, "MILLS8A-OPERATORS",
                                    [("SLANT", 0), ("SPACE", 322), ("STRETCH", 161),
                                     ("SHRINK", 107), ("XHEIGHT", 440), ("QUAD", 1000),
                                     ("EXTRASPACE", 107)]))
@@ -308,11 +316,12 @@ def math_fonts():
             # 0.52 em of the 6.5 pt index font (cramped: 0.44)
             sup = {"SUP1": 518, "SUP2": 518, "SUP3": 440}
             dims = [(k, sup.get(k, val)) for k, val in dims]
-        lines.append(make_tex_font(f"m8asy{suffix}", f, g, size, "MILLS8A-SYMBOLS", dims,
-                                   ic=ic, acc=acc, skewchar=0x30))
+        lines.append(make_tex_font(f"{prefix}sy{suffix}", f, g, size, "MILLS8A-SYMBOLS", dims,
+                                   ic=ic, acc=acc, skewchar=0x30,
+                                   baseline_offsets={g[0x70]: radical_baseline(f, g[0x70])}))
         g = {s: glyph_for(f, cmap, ssty, cp, level) for s, cp in EXTRA.items()}
         g = {s: n for s, n in g.items() if n}
-        lines.append(make_tex_font(f"m8axs{suffix}", f, g, size, "MILLS8A-EXTRA",
+        lines.append(make_tex_font(f"{prefix}xs{suffix}", f, g, size, "MILLS8A-EXTRA",
                                    [("SLANT", 0), ("XHEIGHT", 440), ("QUAD", 1000)]))
     return lines
 
@@ -321,19 +330,39 @@ def math_fonts():
 
 BIG_OPS = {0o120: "summation", 0o130: "summation.v1", 0o131: "product.v1",
            0o132: "integral.v1"}   # cmex slots
+RADICALS = {0o160: "radical.v1", 0o161: "radical.v2", 0o162: "radical.v3",
+            0o163: "radical.v4", 0o164: "uni23B7", 0o165: "radical.ex",
+            0o166: "radical.tp"}
 
 
-def omx_font():
+def radical_baseline(font, name):
+    """Classic TeX takes radical rule thickness from the glyph's height."""
+    from fontTools.pens.boundsPen import BoundsPen
+    gs = font.getGlyphSet()
+    pen = BoundsPen(gs)
+    gs[name].draw(pen)
+    height = 0 if name in ("uni23B7", "radical.ex") else font["MATH"].table.MathConstants.RadicalRuleThickness.Value
+    return height - pen.bounds[3]
+
+
+def omx_font(bold=False):
     """m8aex: a virtual font that is cmex10 except for the summation (text
     and display) and the display product, which are the 1947 sorts from
     Mills8A-Math.otf, set from a small Type 1 font at their real 11pt size.
-    cmex10's size chains and extensible recipes are kept as they are."""
+    cmex10's size chains and extensible recipes are kept; radicals use
+    Mills outlines whose top pieces match the heavier rule thickness."""
     from fontTools.pens.boundsPen import BoundsPen
-    f = TTFont(os.path.join(SRC, "Mills8A-Math.otf"))
+    f = TTFont(os.path.join(SRC, "Mills8A-MathBold.otf" if bold else "Mills8A-Math.otf"))
+    prefix = "m8ab" if bold else "m8a"
     gs = f.getGlyphSet()
     glyphs = {k: g for k, g in zip(range(len(BIG_OPS)), BIG_OPS.values()) if g in gs}
-    line = make_tex_font("m8aexops", f, glyphs, TEXT_PT, "MILLS8A-EXOPS",
+    line = make_tex_font(prefix + "exops", f, glyphs, TEXT_PT, "MILLS8A-EXOPS",
                          [("SLANT", 0), ("SPACE", 0), ("QUAD", 1000)])
+    radicals = dict(enumerate(RADICALS.values()))
+    offsets = {name: radical_baseline(f, name) for name in radicals.values()}
+    radical_line = make_tex_font(prefix + "rad", f, radicals, 10.0, "MILLS8A-RADICALS",
+                                 [("SLANT", 0), ("SPACE", 0), ("QUAD", 1000)],
+                                 baseline_offsets=offsets)
     k = TEXT_PT / 10.0                     # cmex10's design size is 10pt
     dims = {}
     for slot, g in zip(BIG_OPS, BIG_OPS.values()):
@@ -343,9 +372,18 @@ def omx_font():
         gs[g].draw(bp)
         b = bp.bounds
         dims[slot] = (f["hmtx"][g][0] * k / 1000, max(0, b[3]) * k / 1000,
-                      max(0, -b[1]) * k / 1000, list(BIG_OPS.values()).index(g))
+                      max(0, -b[1]) * k / 1000, list(BIG_OPS.values()).index(g), 1)
+    for slot, name in RADICALS.items():
+        bp = BoundsPen(gs)
+        gs[name].draw(bp)
+        b, dy = bp.bounds, offsets[name]
+        dims[slot] = (f["hmtx"][name][0] / 1000, max(0, b[3] + dy) / 1000,
+                      max(0, -b[1] - dy) / 1000, list(RADICALS.values()).index(name), 2)
     pl = run("tftopl", subprocess.run(["kpsewhich", "cmex10.tfm"], capture_output=True,
                                       text=True).stdout.strip()).stdout
+    rule = f["MATH"].table.MathConstants.FractionRuleThickness.Value / 1000
+    pl = re.sub(r"\(DEFAULTRULETHICKNESS R [-\d.]+\)",
+                f"(DEFAULTRULETHICKNESS R {rule:.6f})", pl)
     # top-level property lists start in column 0
     items, cur = [], []
     for ln in pl.splitlines():
@@ -367,21 +405,23 @@ def omx_font():
         assert body.endswith(")")
         body = body[:-1].rstrip()
         if code in dims:
-            wd, ht, dp, slot = dims[code]
+            wd, ht, dp, slot, mapfont = dims[code]
             body = re.sub(r"\n\s*\(CHAR(WD|HT|DP|IC) R [-\d.]+\)", "", body)
             body += (f"\n   (CHARWD R {wd:.6f})\n   (CHARHT R {ht:.6f})\n   (CHARDP R {dp:.6f})"
-                     f"\n   (MAP\n      (SELECTFONT D 1)\n      (SETCHAR O {slot:o})\n      )")
+                     f"\n   (MAP\n      (SELECTFONT D {mapfont})\n      (SETCHAR O {slot:o})\n      )")
         else:
             body += f"\n   (MAP\n      (SELECTFONT D 0)\n      (SETCHAR O {code:o})\n      )"
         out.append(body + "\n   )")
     head_end = next(i for i, it in enumerate(out) if it.startswith("(CHARACTER"))
     out.insert(head_end, "(MAPFONT D 0\n   (FONTNAME cmex10)\n   )\n(MAPFONT D 1\n"
-               f"   (FONTNAME m8aexops)\n   (FONTAT R {k:.4f})\n   )")
-    with open(os.path.join(OUT, "m8aex.vpl"), "w") as fh:
+                f"   (FONTNAME {prefix}exops)\n   (FONTAT R {k:.4f})\n"
+                f"   (FONTDSIZE R {TEXT_PT:.4f})\n   )\n"
+                f"(MAPFONT D 2\n   (FONTNAME {prefix}rad)\n   (FONTDSIZE R 10.0)\n   )")
+    with open(os.path.join(OUT, prefix + "ex.vpl"), "w") as fh:
         fh.write("\n".join(out) + "\n")
-    run("vptovf", "m8aex.vpl", "m8aex.vf", "m8aex.tfm", cwd=OUT)
-    os.remove(os.path.join(OUT, "m8aex.vpl"))
-    return [line]
+    run("vptovf", prefix + "ex.vpl", prefix + "ex.vf", prefix + "ex.tfm", cwd=OUT)
+    os.remove(os.path.join(OUT, prefix + "ex.vpl"))
+    return [line, radical_line]
 
 
 # ------------------------------------------------------------------ LaTeX
@@ -410,22 +450,27 @@ FD = {
     "omlm8am.fd": r"""\ProvidesFile{omlm8am.fd}[@DATE@ v@VERSION@ Mills 8A math italic, pdfLaTeX]
 \DeclareFontFamily{OML}{m8am}{\skewchar\font=127 }
 \DeclareFontShape{OML}{m8am}{m}{it}{<-6> m8amiss <6-8> m8amis <8-> m8ami}{}
+\DeclareFontShape{OML}{m8am}{b}{it}{<-6> m8abmiss <6-8> m8abmis <8-> m8abmi}{}
 """,
     "ot1m8aop.fd": r"""\ProvidesFile{ot1m8aop.fd}[@DATE@ v@VERSION@ Mills 8A math operators, pdfLaTeX]
 \DeclareFontFamily{OT1}{m8aop}{}
 \DeclareFontShape{OT1}{m8aop}{m}{n}{<-6> m8aopss <6-8> m8aops <8-> m8aop}{}
+\DeclareFontShape{OT1}{m8aop}{b}{n}{<-6> m8abopss <6-8> m8abops <8-> m8abop}{}
 """,
     "omxm8aex.fd": r"""\ProvidesFile{omxm8aex.fd}[@DATE@ v@VERSION@ Mills 8A large symbols, pdfLaTeX]
 \DeclareFontFamily{OMX}{m8aex}{}
 \DeclareFontShape{OMX}{m8aex}{m}{n}{<-> sfixed * m8aex}{}
+\DeclareFontShape{OMX}{m8aex}{b}{n}{<-> sfixed * m8abex}{}
 """,
     "omsm8asy.fd": r"""\ProvidesFile{omsm8asy.fd}[@DATE@ v@VERSION@ Mills 8A math symbols, pdfLaTeX]
 \DeclareFontFamily{OMS}{m8asy}{\skewchar\font=48 }
 \DeclareFontShape{OMS}{m8asy}{m}{n}{<-6> m8asyss <6-8> m8asys <8-> m8asy}{}
+\DeclareFontShape{OMS}{m8asy}{b}{n}{<-6> m8absyss <6-8> m8absys <8-> m8absy}{}
 """,
     "um8axs.fd": r"""\ProvidesFile{um8axs.fd}[@DATE@ v@VERSION@ Mills 8A extra relations, pdfLaTeX]
 \DeclareFontFamily{U}{m8axs}{}
 \DeclareFontShape{U}{m8axs}{m}{n}{<-6> m8axsss <6-8> m8axss <8-> m8axs}{}
+\DeclareFontShape{U}{m8axs}{b}{n}{<-6> m8abxsss <6-8> m8abxss <8-> m8abxs}{}
 """,
     "um8asym.fd": r"""\ProvidesFile{um8asym.fd}[@DATE@ v@VERSION@ Mills 8A text symbols, pdfLaTeX]
 \DeclareFontFamily{U}{m8asym}{}
@@ -451,6 +496,11 @@ FD = {
 \DeclareSymbolFont{letters}     {OML}{m8am}{m}{it}
 \DeclareSymbolFont{symbols}     {OMS}{m8asy}{m}{n}
 \DeclareSymbolFont{largesymbols}{OMX}{m8aex}{m}{n}
+% Synthesized bold outlines of the same Mills glyphs, at all three sizes.
+\SetSymbolFont{operators}{bold}{OT1}{m8aop}{b}{n}
+\SetSymbolFont{letters}{bold}{OML}{m8am}{b}{it}
+\SetSymbolFont{symbols}{bold}{OMS}{m8asy}{b}{n}
+\SetSymbolFont{largesymbols}{bold}{OMX}{m8aex}{b}{n}
 % second-order indices in the first-order size, as 1947 sets them (the
 % x of [A^{3^x}] on the Mills page; the 5.5 pt sorts are hard to read)
 \DeclareMathSizes{11}{11}{6.48}{6.48}
@@ -458,6 +508,7 @@ FD = {
 % the 1947 sorts for relations the standard layouts have no slot for;
 % set at the start of the document so they win over amssymb's
 \DeclareSymbolFont{millsextra}{U}{m8axs}{m}{n}
+\SetSymbolFont{millsextra}{bold}{U}{m8axs}{b}{n}
 \def\mills@rel#1#2{\mathchardef#1=\numexpr"3000+\symmillsextra*"100+#2\relax}
 \AtBeginDocument{%
   \mills@rel\neq0 \let\ne\neq
@@ -478,7 +529,7 @@ FD = {
 def main():
     os.makedirs(OUT, exist_ok=True)
     os.makedirs(TEX, exist_ok=True)
-    lines = text_fonts() + math_fonts() + omx_font()
+    lines = text_fonts() + math_fonts() + math_fonts(bold=True) + omx_font() + omx_font(bold=True)
     with open(os.path.join(OUT, "mills8a.map"), "w") as fh:
         fh.write("\n".join(lines) + "\n")
     date = datetime.date.today().strftime("%Y/%m/%d")
