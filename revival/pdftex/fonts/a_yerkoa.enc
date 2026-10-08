@@ -1,0 +1,58 @@
+% THIS FILE WAS AUTOMATICALLY GENERATED -- DO NOT EDIT
+
+%%AutoEnc_yerkoad3trvdywpk5u25jfugya
+% Encoding created by otftotfm on Thu Oct  8 20:55:18 2026
+% Command line follows encoding
+/AutoEnc_yerkoad3trvdywpk5u25jfugya [
+%00
+  /section /dagger /daggerdbl /paragraph /Euro /trademark /.notdef /.notdef
+  /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef
+%10
+  /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef
+  /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef
+%20
+  /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef
+  /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef
+%30
+  /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef
+  /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef
+%40
+  /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef
+  /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef
+%50
+  /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef
+  /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef
+%60
+  /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef
+  /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef
+%70
+  /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef
+  /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef
+%80
+  /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef
+  /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef
+%90
+  /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef
+  /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef
+%A0
+  /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef
+  /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef
+%B0
+  /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef
+  /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef
+%C0
+  /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef
+  /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef
+%D0
+  /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef
+  /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef
+%E0
+  /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef
+  /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef
+%F0
+  /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef
+  /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef
+] def
+% Command line: 'otftotfm -e m8asym.enc --no-type1 --no-updmap --force
+% /opt/data/.t3/scratch/2026-10-08-https-github-com-heiner-mills8a-48b2e80a/mills8a-correctness/revival/pdftex/../fonts/Mills8A-Regular.otf
+% m8asym'

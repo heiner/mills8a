@@ -23,6 +23,9 @@ Changes to Latin Modern:
   § † ‡ ¶ « » ß Æ Œ Ø Ł and others) are Latin Modern Roman's, thickened
   and repositioned; bold, bold italic and 9 pt versions of these are
   further thickened or scaled.
+- Unicode supplements: missing European letters and currency signs are
+  taken from Latin Modern and scaled to Mills 8A's heights; combining marks
+  and their positioning tables are added using the existing accents.
 - The pdfTeX fonts (*.pfb, *.tfm, *.vf, *.enc) are conversions of the
   above, split into TeX's 256-glyph encodings.
 - All are renamed (Mills 8A, m8a*).

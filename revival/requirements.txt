@@ -1,0 +1,6 @@
+fonttools==4.66.1
+uharfbuzz>=0.50
+numpy>=2
+scipy>=1.14
+Pillow>=11
+freetype-py>=2.5

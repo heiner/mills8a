@@ -1,0 +1,30 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath}
+\ifdefined\directlua
+  \usepackage{unicode-math}
+  \setmainfont{Mills8A-Regular.otf}[RawFeature=-rand,
+    ItalicFont=Mills8A-Italic.otf, BoldFont=Mills8A-Bold.otf,
+    BoldItalicFont=Mills8A-BoldItalic.otf]
+  \setmathfont{Mills8A-Math.otf}
+  \DeclareMathSizes{11}{11}{6.48}{5.51}
+  \DeclareMathSizes{10.95}{11}{6.48}{5.51}
+\else
+  \usepackage[osf]{mills8a}
+\fi
+\begin{document}
+office, ffi, fl; \emph{italic}, \textbf{bold}, \textbf{\emph{bold italic}}.
+\textsc{office, fi fl ffi ffl ff; aáäæœßąøł}; \texteuro{} 123, \texttrademark.
+
+\ifdefined\directlua
+  Decomposed marks: ā́̈ i̋ j̋ Ą; Ąą Ęę Įį Ųų ďľĽť Đđ Ħħ Ŋŋ.
+  {\fontspec{Mills8A-Regular9.otf}[RawFeature=+smcp] aáäæœßąøł}
+  {\fontspec{Mills8A-Bold.otf}[RawFeature=+smcp] aáäæœßąøł}
+\else
+  {\footnotesize\scshape\typeout{MILLS-SMALLCAPS9: \fontname\font}aáäæœßąøł}
+  {\bfseries\scshape\typeout{MILLS-BOLD-SMALLCAPS: \fontname\font}aáäæœßąøł}
+\fi
+
+\[ p_{n+1}-p_n<Kp_n^{5/8},\qquad [A^{3^x}],\qquad
+   \sum_{n=1}^{\infty}\frac{1}{n^s}=\prod_p\frac{1}{1-p^{-s}},\qquad
+   \int_0^1 f(x)\,dx,\quad \widehat{x},\quad \left(\frac{a}{b}\right). \]
+\end{document}

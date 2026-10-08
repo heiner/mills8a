@@ -104,6 +104,10 @@ example, including the 1947 script positions.
 
 ### OpenType fonts
 
+This fork adds extended Latin small caps, Unicode supplements and combining-mark
+positioning, and repairs accent widths and clipping metrics. See [the build
+documentation](revival/README.md) for dependencies and font regression checks.
+
 The family is also built as OpenType fonts (`revival/fonts`, with an OpenType
 math font) for LuaLaTeX and other software. They can set each letter as one
 of up to 8 real 1947 impressions at random (feature `rand`); `tex/mills.tex`
