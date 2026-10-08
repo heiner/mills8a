@@ -4,7 +4,7 @@ Copyright 2026 heiner
 Fonts
 -----
 
-The font files (*.otf, *.pfb, *.tfm, *.vf, *.enc, mills8a.map) contain
+The font files (*.otf, *.woff2, *.pfb, *.tfm, *.vf, *.enc, mills8a.map) contain
 glyphs from Latin Modern and Latin Modern Math, copyright B. Jackowski,
 J. M. Nowacki, P. Strzelczyk and P. Pianowski (on behalf of TeX users
 groups), released under the GUST Font License. They are a modified version
@@ -23,6 +23,9 @@ Changes to Latin Modern:
   § † ‡ ¶ « » ß Æ Œ Ø Ł and others) are Latin Modern Roman's, thickened
   and repositioned; bold, bold italic and 9 pt versions of these are
   further thickened or scaled.
+- Unicode supplements: missing European letters and currency signs are
+  taken from Latin Modern and scaled to Mills 8A's heights; combining marks
+  and their positioning tables are added using the existing accents.
 - The pdfTeX fonts (*.pfb, *.tfm, *.vf, *.enc) are conversions of the
   above, split into TeX's 256-glyph encodings.
 - All are renamed (Mills 8A, m8a*).

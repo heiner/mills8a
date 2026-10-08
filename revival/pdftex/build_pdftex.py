@@ -26,6 +26,7 @@ import datetime
 import os
 import re
 import subprocess
+import tempfile
 
 from fontTools.ttLib import TTFont
 from fontTools import subset
@@ -56,6 +57,8 @@ TEXT_FONTS = [
     ("Mills8A-Bold.otf", "m8ab8t", ["liga"]),
     ("Mills8A-BoldItalic.otf", "m8abi8t", ["liga"]),
     ("Mills8A-Regular9.otf", "m8ar98t", ["liga"]),
+    ("Mills8A-Regular9.otf", "m8ar9c8t", ["liga", "smcp"]),
+    ("Mills8A-Bold.otf", "m8abc8t", ["liga", "smcp"]),
     ("Mills8A-Italic9.otf", "m8ari98t", ["liga"]),
     # the same with old-style figures (family m8aj, option osf)
     ("Mills8A-Regular.otf", "m8arj8t", ["liga", "onum"]),
@@ -64,12 +67,14 @@ TEXT_FONTS = [
     ("Mills8A-Bold.otf", "m8abj8t", ["liga", "onum"]),
     ("Mills8A-BoldItalic.otf", "m8abij8t", ["liga", "onum"]),
     ("Mills8A-Regular9.otf", "m8ar9j8t", ["liga", "onum"]),
+    ("Mills8A-Regular9.otf", "m8ar9cj8t", ["liga", "smcp", "onum"]),
+    ("Mills8A-Bold.otf", "m8abcj8t", ["liga", "smcp", "onum"]),
     ("Mills8A-Italic9.otf", "m8ari9j8t", ["liga", "onum"]),
 ]
 
 
-SYM_ENC = """/m8asym [ /section /dagger /daggerdbl /paragraph
-""" + " ".join(["/.notdef"] * 252) + """ ] def
+SYM_ENC = """/m8asym [ /section /dagger /daggerdbl /paragraph /Euro /trademark
+""" + " ".join(["/.notdef"] * 250) + """ ] def
 """
 
 
@@ -84,7 +89,19 @@ def text_fonts():
             if line.strip():
                 maplines.append(re.sub(r"<([\w-]+)\.otf", r"<\1.pfb", line))
         if otf not in done:
-            run("cfftot1", os.path.join(SRC, otf), otf[:-4] + ".pfb", cwd=OUT)
+            # Type 1 cannot select rand. Keep all encoded characters and the
+            # supported text substitutions, but omit the unused impressions.
+            font = TTFont(os.path.join(SRC, otf))
+            options = subset.Options()
+            options.layout_features = ["liga", "onum", "smcp"]
+            options.name_IDs = ["*"]
+            subsetter = subset.Subsetter(options=options)
+            subsetter.populate(unicodes=list(font.getBestCmap()))
+            subsetter.subset(font)
+            with tempfile.TemporaryDirectory() as directory:
+                source = os.path.join(directory, otf)
+                font.save(source)
+                run("cfftot1", source, otf[:-4] + ".pfb", cwd=OUT)
             done.add(otf)
     # § † ‡ ¶ (LaTeX takes them from TS1): a small font in its own encoding
     with open(os.path.join(OUT, "m8asym.enc"), "w") as fh:
@@ -391,21 +408,25 @@ FD = {
 \DeclareFontFamily{T1}{m8a}{}
 \DeclareFontShape{T1}{m8a}{m}{n}{<-10> m8ar98t <10-> m8ar8t}{}
 \DeclareFontShape{T1}{m8a}{m}{it}{<-10> m8ari98t <10-> m8ari8t}{}
-\DeclareFontShape{T1}{m8a}{m}{sc}{<-> m8arc8t}{}
+\DeclareFontShape{T1}{m8a}{m}{sc}{<-10> m8ar9c8t <10-> m8arc8t}{}
+\DeclareFontShape{T1}{m8a}{b}{sc}{<-> m8abc8t}{}
 \DeclareFontShape{T1}{m8a}{b}{n}{<-> m8ab8t}{}
 \DeclareFontShape{T1}{m8a}{b}{it}{<-> m8abi8t}{}
 \DeclareFontShape{T1}{m8a}{bx}{n}{<-> ssub * m8a/b/n}{}
 \DeclareFontShape{T1}{m8a}{bx}{it}{<-> ssub * m8a/b/it}{}
+\DeclareFontShape{T1}{m8a}{bx}{sc}{<-> ssub * m8a/b/sc}{}
 """,
     "t1m8aj.fd": r"""\ProvidesFile{t1m8aj.fd}[@DATE@ v@VERSION@ Mills 8A text, old-style figures, T1, pdfLaTeX]
 \DeclareFontFamily{T1}{m8aj}{}
 \DeclareFontShape{T1}{m8aj}{m}{n}{<-10> m8ar9j8t <10-> m8arj8t}{}
 \DeclareFontShape{T1}{m8aj}{m}{it}{<-10> m8ari9j8t <10-> m8arij8t}{}
-\DeclareFontShape{T1}{m8aj}{m}{sc}{<-> m8arcj8t}{}
+\DeclareFontShape{T1}{m8aj}{m}{sc}{<-10> m8ar9cj8t <10-> m8arcj8t}{}
+\DeclareFontShape{T1}{m8aj}{b}{sc}{<-> m8abcj8t}{}
 \DeclareFontShape{T1}{m8aj}{b}{n}{<-> m8abj8t}{}
 \DeclareFontShape{T1}{m8aj}{b}{it}{<-> m8abij8t}{}
 \DeclareFontShape{T1}{m8aj}{bx}{n}{<-> ssub * m8aj/b/n}{}
 \DeclareFontShape{T1}{m8aj}{bx}{it}{<-> ssub * m8aj/b/it}{}
+\DeclareFontShape{T1}{m8aj}{bx}{sc}{<-> ssub * m8aj/b/sc}{}
 """,
     "omlm8am.fd": r"""\ProvidesFile{omlm8am.fd}[@DATE@ v@VERSION@ Mills 8A math italic, pdfLaTeX]
 \DeclareFontFamily{OML}{m8am}{\skewchar\font=127 }
@@ -470,6 +491,8 @@ FD = {
 \DeclareTextCommand{\textdagger}{T1}{{\usefont{U}{m8asym}{m}{n}\char1}}
 \DeclareTextCommand{\textdaggerdbl}{T1}{{\usefont{U}{m8asym}{m}{n}\char2}}
 \DeclareTextCommand{\textparagraph}{T1}{{\usefont{U}{m8asym}{m}{n}\char3}}
+\DeclareTextCommand{\texteuro}{T1}{{\usefont{U}{m8asym}{m}{n}\char4}}
+\DeclareTextCommand{\texttrademark}{T1}{{\usefont{U}{m8asym}{m}{n}\char5}}
 \endinput
 """,
 }

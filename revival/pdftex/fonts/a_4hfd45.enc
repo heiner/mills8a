@@ -1,21 +1,21 @@
 % THIS FILE WAS AUTOMATICALLY GENERATED -- DO NOT EDIT
 
-%%AutoEnc_uo747gtazxv4qv6mx4skxf7xua
-% Encoding created by otftotfm on Mon Oct  5 20:56:30 2026
+%%AutoEnc_4hfd45tyfawwujaas7ixh56fqc
+% Encoding created by otftotfm on Thu Oct  8 20:55:18 2026
 % Command line follows encoding
-/AutoEnc_uo747gtazxv4qv6mx4skxf7xua [
+/AutoEnc_4hfd45tyfawwujaas7ixh56fqc [
 %00
   /grave /acute /circumflex /tilde /dieresis /hungarumlaut /ring /caron
   /breve /macron /dotaccent /cedilla /f_f /f_f_i /f_f_l /.notdef
 %10
-  /quotedblleft /quotedblright /.notdef /guillemotleft /guillemotright /endash /emdash /.notdef
+  /quotedblleft /quotedblright /.notdef /guillemotleft /guillemotright /endash.osf /emdash /.notdef
   /.notdef /dotlessi /uni0237 /.notdef /fi /fl /.notdef /.notdef
 %20
   /.notdef /exclam /quotedblright /numbersign /dollar /percent /ampersand /quoteright
   /parenleft /parenright /asterisk /plus /comma /hyphen /period /slash
 %30
-  /zero /one /two /three /four /five /six /seven
-  /eight /nine /colon /semicolon /less /equal /greater /question
+  /zero.osf /one.osf /two.osf /three.osf /four.osf /five.osf /six.osf /seven.osf
+  /eight.osf /nine.osf /colon /semicolon /less /equal /greater /question
 %40
   /at /A /B /C /D /E /F /G
   /H /I /J /K /L /M /N /O
@@ -23,23 +23,23 @@
   /P /Q /R /S /T /U /V /W
   /X /Y /Z /bracketleft /backslash /bracketright /asciicircum /underscore
 %60
-  /quoteleft /a.sc /b.sc /c.sc /d.sc /e.sc /f.sc /g.sc
-  /h.sc /i.sc /j.sc /k.sc /l.sc /m.sc /n.sc /o.sc
+  /quoteleft /a /b /c /d /e /f /g
+  /h /i /j /k /l /m /n /o
 %70
-  /p.sc /q.sc /r.sc /s.sc /t.sc /u.sc /v.sc /w.sc
-  /x.sc /y.sc /z.sc /braceleft /bar /braceright /asciitilde /hyphen
+  /p /q /r /s /t /u /v /w
+  /x /y /z /braceleft /bar /braceright /asciitilde /hyphen
 %80
-  /Abreve /.notdef /Cacute /Ccaron /Dcaron /Ecaron /.notdef /Gbreve
-  /Lacute /.notdef /Lslash /Nacute /Ncaron /.notdef /Ohungarumlaut /Racute
+  /Abreve /Aogonek /Cacute /Ccaron /Dcaron /Ecaron /Eogonek /Gbreve
+  /Lacute /Lcaron /Lslash /Nacute /Ncaron /Eng /Ohungarumlaut /Racute
 %90
   /Rcaron /Sacute /Scaron /Scedilla /Tcaron /uni0162 /Uhungarumlaut /Uring
-  /Ydieresis /Zacute /Zcaron /Zdotaccent /.notdef /Idotaccent /.notdef /section
+  /Ydieresis /Zacute /Zcaron /Zdotaccent /IJ /Idotaccent /dcroat /section
 %A0
-  /abreve /.notdef /cacute /ccaron /.notdef /ecaron /.notdef /gbreve
-  /lacute /.notdef /lslash /nacute /ncaron /.notdef /ohungarumlaut /racute
+  /abreve /aogonek /cacute /ccaron /dcaron /ecaron /eogonek /gbreve
+  /lacute /lcaron /lslash /nacute /ncaron /eng /ohungarumlaut /racute
 %B0
-  /rcaron /sacute /scaron /scedilla /.notdef /uni0163 /uhungarumlaut /uring
-  /ydieresis /zacute /zcaron /zdotaccent /.notdef /exclamdown /questiondown /.notdef
+  /rcaron /sacute /scaron /scedilla /tcaron /uni0163 /uhungarumlaut /uring
+  /ydieresis /zacute /zcaron /zdotaccent /ij /exclamdown /questiondown /sterling
 %C0
   /Agrave /Aacute /Acircumflex /Atilde /Adieresis /Aring /AE /Ccedilla
   /Egrave /Eacute /Ecircumflex /Edieresis /Igrave /Iacute /Icircumflex /Idieresis
@@ -53,6 +53,6 @@
   /eth /ntilde /ograve /oacute /ocircumflex /otilde /odieresis /oe
   /oslash /ugrave /uacute /ucircumflex /udieresis /yacute /thorn /germandbls
 ] def
-% Command line: 'otftotfm -e ec --no-type1 --no-updmap --force -fliga -fsmcp
-% /home/user/playground/millsmodern/revival/pdftex/../fonts/Mills8A-Regular.otf
-% m8arc8t'
+% Command line: 'otftotfm -e ec --no-type1 --no-updmap --force -fliga -fonum
+% /opt/data/.t3/scratch/2026-10-08-https-github-com-heiner-mills8a-48b2e80a/mills8a-correctness/revival/pdftex/../fonts/Mills8A-Regular.otf
+% m8arj8t'

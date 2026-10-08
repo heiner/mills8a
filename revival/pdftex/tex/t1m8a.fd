@@ -3,8 +3,10 @@
 \DeclareFontFamily{T1}{m8a}{}
 \DeclareFontShape{T1}{m8a}{m}{n}{<-10> m8ar98t <10-> m8ar8t}{}
 \DeclareFontShape{T1}{m8a}{m}{it}{<-10> m8ari98t <10-> m8ari8t}{}
-\DeclareFontShape{T1}{m8a}{m}{sc}{<-> m8arc8t}{}
+\DeclareFontShape{T1}{m8a}{m}{sc}{<-10> m8ar9c8t <10-> m8arc8t}{}
+\DeclareFontShape{T1}{m8a}{b}{sc}{<-> m8abc8t}{}
 \DeclareFontShape{T1}{m8a}{b}{n}{<-> m8ab8t}{}
 \DeclareFontShape{T1}{m8a}{b}{it}{<-> m8abi8t}{}
 \DeclareFontShape{T1}{m8a}{bx}{n}{<-> ssub * m8a/b/n}{}
 \DeclareFontShape{T1}{m8a}{bx}{it}{<-> ssub * m8a/b/it}{}
+\DeclareFontShape{T1}{m8a}{bx}{sc}{<-> ssub * m8a/b/sc}{}

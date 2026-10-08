@@ -1,11 +1,11 @@
 % THIS FILE WAS AUTOMATICALLY GENERATED -- DO NOT EDIT
 
-%%AutoEnc_h7cfaoisnjbigduxqfnsq3saxf
-% Encoding created by otftotfm on Mon Oct  5 20:56:31 2026
+%%AutoEnc_yerkoad3trvdywpk5u25jfugya
+% Encoding created by otftotfm on Thu Oct  8 20:55:18 2026
 % Command line follows encoding
-/AutoEnc_h7cfaoisnjbigduxqfnsq3saxf [
+/AutoEnc_yerkoad3trvdywpk5u25jfugya [
 %00
-  /section /dagger /daggerdbl /paragraph /.notdef /.notdef /.notdef /.notdef
+  /section /dagger /daggerdbl /paragraph /Euro /trademark /.notdef /.notdef
   /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef
 %10
   /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef
@@ -54,5 +54,5 @@
   /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef
 ] def
 % Command line: 'otftotfm -e m8asym.enc --no-type1 --no-updmap --force
-% /home/user/playground/millsmodern/revival/pdftex/../fonts/Mills8A-Regular.otf
+% /opt/data/.t3/scratch/2026-10-08-https-github-com-heiner-mills8a-48b2e80a/mills8a-correctness/revival/pdftex/../fonts/Mills8A-Regular.otf
 % m8asym'

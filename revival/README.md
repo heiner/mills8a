@@ -88,6 +88,61 @@ leading (see *Scripts* below).
 LuaLaTeX is needed for the randomness: XeLaTeX loads the fonts, but its
 HarfBuzz shaping gives every repeat of a word the same impressions.
 
+The text fonts include zero-advance combining grave, acute, circumflex,
+tilde, macron, breve, dot, dieresis, ring, double acute, caron, cedilla and
+ogonek marks, with `mark` and `mkmk` positioning. Common European letters
+missing from the scans, the euro and trademark signs come from Latin Modern,
+scaled to the corresponding style's x-height or cap height. This extends
+coverage without claiming a historical source for those additions. Nonbreaking
+spaces and hyphens have explicit Unicode mappings. Kerning remains absent.
+Roman, bold and the 9 pt roman cut expose `smcp`, including accented letters
+and Æ/Œ/Ø/Ł counterparts. Accented small caps use the existing small-cap
+letters and accents; missing special forms use scaled capitals. Small-cap ß
+uses two small-cap S letters.
+
+`python3 finish_fonts.py` reapplies the Unicode supplements, OpenType features
+and clipping-metric repairs to the committed fonts without rebuilding the scan
+pipeline. It also runs automatically in `build.sh`. Font regression checks:
+
+```sh
+python3 -m unittest discover -s revival -v  # from the repository root
+```
+
+Install the Python tools with `python3 -m pip install -r revival/requirements.txt`.
+Finishing also requires the Latin Modern OpenType fonts supplied by TeX Live.
+
+`python3 revival/optimize_fonts.py` shares repeated CFF outline programs;
+the shipped OpenType fonts use this lossless optimization. It runs in
+`build.sh` before the Type 1 conversion. Optional screen hints are available
+with `--hint --output-dir build/hinted`. The hints use measured alignment
+zones and stem widths. They can increase file size and are deliberately kept
+as a separate export; the primary fonts preserve the unhinted print outlines.
+The hinting tool rounds fractional outline coordinates to the nearest unit;
+it leaves advances and OpenType layout features unchanged.
+
+For websites or installations that do not need random impressions:
+
+```sh
+python3 revival/export_fonts.py  # from the repository root
+```
+
+`build/web/` contains the complete family as WOFF2. `build/compact/` contains
+OTF and WOFF2 versions without `rand`, named **Mills 8A Compact** so they can
+be installed alongside the complete family. Unicode coverage, ligatures,
+small caps, old-style figures, combining marks and math features are retained.
+Both directories include the font licences. The generated exports stay out
+of Git; regenerate them from the committed fonts.
+
+The pdfLaTeX conversion also omits unused random impressions. Its T1 package
+selects the 9 pt small caps below 10 pt, supports bold small caps, and loads
+the added euro and trademark signs through its symbol font.
+
+Run `./verify.sh` from the root to test the fonts and install the TDS zip
+into a temporary TeX tree, then typeset `tex/font-regression.tex` with
+pdfLaTeX and LuaLaTeX. This requires TeX Live's LaTeX, LuaTeX and recommended
+fonts packages, `poppler-utils`, ripgrep, and the Python requirements above.
+Rebuilding the Type 1 files additionally requires `lcdf-typetools`.
+
 ## Sources
 
 - `scans/erdos1947.pdf`: P. Erdős, *Some asymptotic formulas for
