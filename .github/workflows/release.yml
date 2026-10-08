@@ -53,12 +53,19 @@ jobs:
           \[ p_{n+1}-p_n<Kp_n^{5/8}, \qquad
              \sum_{n=1}^\infty \frac{1}{n^s}=\prod_p\frac{1}{1-p^{-s}}, \qquad
              \lim_{n\to\infty}u_n \]
+          \[ \mathcal{ABCDEFGHIJKLMNOPQRSTUVWXYZ}, \qquad
+             \boldsymbol{\delta\iota\rho\upsilon}_{\boldsymbol{\delta\rho}} \]
+          \[ \frac{1+x^2}{1-x^2},\qquad
+             \sqrt{\frac{a+b}{c+d}},\qquad
+             \sqrt{\begin{matrix}a\\b\\c\\d\\e\end{matrix}} \]
           \end{document}
           TEX
           pdflatex -interaction=nonstopmode -halt-on-error test.tex
           ! grep -q "Missing character" test.log
           pdffonts test.pdf | tee fonts.txt
           grep -q Mills8A-Regular fonts.txt
+          grep -q Mills8A-TeX-m8abmi fonts.txt
+          grep -q Mills8A-TeX-m8arad fonts.txt
           ! awk 'NR>2 && $5=="no"' fonts.txt | grep -q .     # every font embedded
 
       - name: Attach to the release

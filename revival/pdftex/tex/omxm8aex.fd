@@ -2,3 +2,4 @@
 \ProvidesFile{omxm8aex.fd}[2026/10/08 v0.1.0 Mills 8A large symbols, pdfLaTeX]
 \DeclareFontFamily{OMX}{m8aex}{}
 \DeclareFontShape{OMX}{m8aex}{m}{n}{<-> sfixed * m8aex}{}
+\DeclareFontShape{OMX}{m8aex}{b}{n}{<-> sfixed * m8abex}{}

@@ -2,3 +2,4 @@
 \ProvidesFile{omsm8asy.fd}[2026/10/08 v0.1.0 Mills 8A math symbols, pdfLaTeX]
 \DeclareFontFamily{OMS}{m8asy}{\skewchar\font=48 }
 \DeclareFontShape{OMS}{m8asy}{m}{n}{<-6> m8asyss <6-8> m8asys <8-> m8asy}{}
+\DeclareFontShape{OMS}{m8asy}{b}{n}{<-6> m8absyss <6-8> m8absys <8-> m8absy}{}

@@ -1,0 +1,36 @@
+% Compile with pdfLaTeX, LuaLaTeX or XeLaTeX after installing the fonts.
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=22mm]{geometry}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage{amsmath}
+  \usepackage{mills8a}
+\else
+  \usepackage{unicode-math}
+  \setmainfont{Mills8A-Regular.otf}[BoldFont=Mills8A-Bold.otf]
+  \setmathfont{Mills8A-Math.otf}
+  \setmathfont{Mills8A-MathBold.otf}[version=bold]
+\fi
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\newcommand{\RuleSamples}{%
+  Inline: $\frac{a+b}{c+d}$, $\sqrt{x+y}$, $\sqrt[3]{1+x^2}$,
+  and $a_{\sqrt{x}}+b_{\frac{1}{2}}$.
+  \[
+    \frac{1+x^2}{1-x^2}\qquad
+    \frac{\frac{a}{b}+1}{\frac{c}{d}-1}\qquad
+    \sqrt{x^2+y^2}\qquad
+    \sqrt{\frac{a+b}{c+d}}
+  \]
+  \[
+    \sqrt{1+\sqrt{1+x^2}}\qquad
+    \sqrt[3]{\frac{\sqrt{a+b}}{1+\frac{x}{y}}}\qquad
+    \sqrt{\begin{matrix}a+b\\c+d\\e+f\\g+h\\i+j\end{matrix}}
+  \]
+}
+\begin{document}
+\section*{Mills 8A: fraction and radical rules}
+\RuleSamples
+\section*{Bold mathematics}
+{\mathversion{bold}\RuleSamples}
+\end{document}

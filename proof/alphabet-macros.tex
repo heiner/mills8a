@@ -1,0 +1,100 @@
+% Reusable LaTeX3 alphabet specimens. Load amsmath, amssymb and mathrsfs first.
+% Examples: \LatinUppercase[\mathcal], \TextLowercase[\texttt],
+%           \GreekLowercase[\boldsymbol]. Commands include their math mode.
+\ExplSyntaxOn
+\cs_new_protected:Npn \mills_print_latin:Nnn #1#2#3
+  {
+    \ensuremath
+      { #1 { \int_step_inline:nnn {#2} {#3}
+          { \char_generate:nn {##1} {11} \mkern 1mu } } }
+  }
+\NewDocumentCommand \LatinUppercase { O{\mathnormal} }
+  { \mills_print_latin:Nnn #1 {65} {90} }
+\NewDocumentCommand \LatinLowercase { O{\mathnormal} }
+  { \mills_print_latin:Nnn #1 {97} {122} }
+
+\cs_new_protected:Npn \mills_print_text:Nnn #1#2#3
+  { #1 { \int_step_inline:nnn {#2} {#3} { \char_generate:nn {##1} {11} } } }
+\NewDocumentCommand \TextUppercase { O{\textnormal} }
+  { \mills_print_text:Nnn #1 {65} {90} }
+\NewDocumentCommand \TextLowercase { O{\textnormal} }
+  { \mills_print_text:Nnn #1 {97} {122} }
+
+\clist_const:Nn \c_mills_greek_lowercase_clist
+  {
+    \alpha, \beta, \gamma, \delta, \epsilon, \zeta,
+    \eta, \theta, \iota, \kappa, \lambda, \mu,
+    \nu, \xi, o, \pi, \rho, \sigma,
+    \tau, \upsilon, \phi, \chi, \psi, \omega
+  }
+% Traditional TeX uses Latin lookalikes for Greek letters without commands.
+\clist_const:Nn \c_mills_greek_uppercase_clist
+  {
+    \mathrm{A}, \mathrm{B}, \Gamma, \Delta, \mathrm{E}, \mathrm{Z},
+    \mathrm{H}, \Theta, \mathrm{I}, \mathrm{K}, \Lambda, \mathrm{M},
+    \mathrm{N}, \Xi, \mathrm{O}, \Pi, \mathrm{P}, \Sigma,
+    \mathrm{T}, \Upsilon, \Phi, \mathrm{X}, \Psi, \Omega
+  }
+\clist_const:Nn \c_mills_greek_variants_clist
+  { \varepsilon, \vartheta, \varkappa, \varpi, \varrho, \varsigma, \varphi, \digamma }
+\cs_new_protected:Npn \mills_print_greek:NN #1#2
+  { \ensuremath { #1 { \clist_use:Nn #2 { \mkern 4mu } } } }
+\NewDocumentCommand \GreekLowercase { O{\mathnormal} }
+  { \mills_print_greek:NN #1 \c_mills_greek_lowercase_clist }
+\NewDocumentCommand \GreekUppercase { O{\mathnormal} }
+  { \mills_print_greek:NN #1 \c_mills_greek_uppercase_clist }
+\NewDocumentCommand \GreekVariants { O{\mathnormal} }
+  { \mills_print_greek:NN #1 \c_mills_greek_variants_clist }
+
+\cs_new_protected:Npn \mills_text_sample:N #1
+  {
+    \par\noindent\texttt{\token_to_str:N #1}
+    \par\nobreak\noindent\TextUppercase[#1]
+    \par\nobreak\noindent\TextLowercase[#1]
+    \par\smallskip
+  }
+\NewDocumentCommand \TextAlphabetSamples { }
+  {
+    \mills_text_sample:N \textnormal
+    \mills_text_sample:N \textbf
+    \mills_text_sample:N \textit
+    \mills_text_sample:N \textsl
+    \mills_text_sample:N \textsc
+    \mills_text_sample:N \textsf
+    \mills_text_sample:N \texttt
+  }
+\cs_new_protected:Npn \mills_latin_sample:Nn #1#2
+  {
+    \par\noindent\texttt{\token_to_str:N #1}
+    \par\nobreak\noindent\LatinUppercase[#1]
+    \str_if_eq:nnT {#2} {both}
+      { \par\nobreak\noindent\LatinLowercase[#1] }
+    \par\smallskip
+  }
+\NewDocumentCommand \AlphabetSamples { }
+  {
+    \mills_latin_sample:Nn \mathnormal {both}
+    \mills_latin_sample:Nn \mathrm     {both}
+    \mills_latin_sample:Nn \mathit     {both}
+    \mills_latin_sample:Nn \mathbf     {both}
+    \mills_latin_sample:Nn \boldsymbol {both}
+    \mills_latin_sample:Nn \mathsf     {both}
+    \mills_latin_sample:Nn \mathtt     {both}
+    % These three alphabets have capitals only in the pdfLaTeX setup.
+    \mills_latin_sample:Nn \mathcal    {upper}
+    \mills_latin_sample:Nn \mathbb     {upper}
+    \mills_latin_sample:Nn \mathfrak   {both}
+    \mills_latin_sample:Nn \mathscr    {upper}
+    \par\medskip\noindent\textbf{Greek:~lowercase}
+    \par\nobreak\noindent\GreekLowercase
+    \par\smallskip\noindent\textbf{Greek:~uppercase}
+    \par\nobreak\noindent\GreekUppercase
+    \par\smallskip\noindent\textbf{Greek:~variants~and~digamma}
+    \par\nobreak\noindent\GreekVariants
+    \par\smallskip\noindent\textbf{Bold~Greek:~lowercase}
+    \par\nobreak\noindent\GreekLowercase[\boldsymbol]
+    \par\smallskip\noindent\textbf{Bold~Greek:~uppercase}
+    \par\nobreak\noindent\GreekUppercase[\boldsymbol]
+    \par
+  }
+\ExplSyntaxOff

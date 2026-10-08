@@ -17,6 +17,11 @@
 \DeclareSymbolFont{letters}     {OML}{m8am}{m}{it}
 \DeclareSymbolFont{symbols}     {OMS}{m8asy}{m}{n}
 \DeclareSymbolFont{largesymbols}{OMX}{m8aex}{m}{n}
+% Synthesized bold outlines of the same Mills glyphs, at all three sizes.
+\SetSymbolFont{operators}{bold}{OT1}{m8aop}{b}{n}
+\SetSymbolFont{letters}{bold}{OML}{m8am}{b}{it}
+\SetSymbolFont{symbols}{bold}{OMS}{m8asy}{b}{n}
+\SetSymbolFont{largesymbols}{bold}{OMX}{m8aex}{b}{n}
 % second-order indices in the first-order size, as 1947 sets them (the
 % x of [A^{3^x}] on the Mills page; the 5.5 pt sorts are hard to read)
 \DeclareMathSizes{11}{11}{6.48}{6.48}
@@ -24,6 +29,7 @@
 % the 1947 sorts for relations the standard layouts have no slot for;
 % set at the start of the document so they win over amssymb's
 \DeclareSymbolFont{millsextra}{U}{m8axs}{m}{n}
+\SetSymbolFont{millsextra}{bold}{U}{m8axs}{b}{n}
 \def\mills@rel#1#2{\mathchardef#1=\numexpr"3000+\symmillsextra*"100+#2\relax}
 \AtBeginDocument{%
   \mills@rel\neq0 \let\ne\neq

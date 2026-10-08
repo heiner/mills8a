@@ -1,0 +1,41 @@
+% Compile with pdflatex after installing the completed fonts.
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=20mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{mills8a}
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\begin{document}
+\section*{Mills 8A: reconstructed calligraphic capitals}
+Historical outlines: $\mathcal{A\ C\ L\ U}$.
+The other 22 capitals are newly drawn reconstructions.
+
+\bigskip
+{\fontsize{28}{42}\selectfont
+\(\mathcal{A B C D E F G H I}\)\par
+\(\mathcal{J K L M N O P Q}\)\par
+\(\mathcal{R S T U V W X Y Z}\)\par}
+
+\section*{Bold calligraphic capitals}
+{\fontsize{28}{42}\selectfont
+\(\boldsymbol{\mathcal{A B C D E F G H I}}\)\par
+\(\boldsymbol{\mathcal{J K L M N O P Q}}\)\par
+\(\boldsymbol{\mathcal{R S T U V W X Y Z}}\)\par}
+
+\section*{Greek: normal and bold}
+{\fontsize{22}{32}\selectfont
+\(\alpha\ \beta\ \gamma\ \delta\ \epsilon\ \zeta\ \eta\ \theta\ \iota\ \kappa\ \lambda\ \mu\)\par
+\(\boldsymbol{\alpha\ \beta\ \gamma\ \delta\ \epsilon\ \zeta\ \eta\ \theta\ \iota\ \kappa\ \lambda\ \mu}\)\par
+\(\nu\ \xi\ o\ \pi\ \rho\ \sigma\ \tau\ \upsilon\ \phi\ \chi\ \psi\ \omega\)\par
+\(\boldsymbol{\nu\ \xi\ o\ \pi\ \rho\ \sigma\ \tau\ \upsilon\ \phi\ \chi\ \psi\ \omega}\)\par}
+
+\section*{Small sizes and accents}
+\[
+  \mathcal{B}_{\mathcal{B}_{\mathcal{B}}}
+  \quad \mathcal{M}_{\mathcal{M}_{\mathcal{M}}}
+  \quad \widehat{\mathcal{Z}}\quad\hat\delta\quad\hat\rho
+  \qquad
+  \boldsymbol{\delta_{\delta_\delta}\quad\iota_{\iota_\iota}
+    \quad\rho_{\rho_\rho}\quad\upsilon_{\upsilon_\upsilon}}
+\]
+\end{document}

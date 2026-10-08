@@ -16,8 +16,13 @@ Changes to Latin Modern:
 - Mills8A-Math: Latin Modern Math with its letters, Greek, figures,
   operators, \cdot and \cdots, display sum, product and integral and their
   script variants replaced by glyphs traced from 1940s printing in Monotype
-  Modern 8A; script sizes and shifts in the MATH table changed; the other
-  glyphs and the MATH table are Latin Modern Math's.
+  Modern 8A; script sizes and shifts in the MATH table changed. The missing
+  calligraphic capitals are newly drawn roundhand reconstructions, retaining
+  the historical A, C, L and U; Greek fill-ins are weight-matched. Unicode
+  bold alphabets and Mills8A-MathBold are synthesized from Mills outlines.
+  Fraction and radical rules are heavier, with matching expanded radical
+  outlines and flat-jointed extensible pieces.
+  The other glyphs and the MATH table are Latin Modern Math's.
 - The text fonts: glyphs traced from the same printing; the accents other
   than the dieresis and the symbols the printing lacks (# % @ \ ^ _ { } ~
   § † ‡ ¶ « » ß Æ Œ Ø Ł and others) are Latin Modern Roman's, thickened
